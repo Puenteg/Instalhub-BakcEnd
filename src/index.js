@@ -1,26 +1,29 @@
+
 const express = require('express');
 const mongoose = require('mongoose');
-require("dotenv").config();
+const cors = require('cors');
+require('dotenv').config();
 
-const usersRoute = require("./routes/users");
-
+const homeRoute = require('./routes/homeRoutes');
 
 const app = express();
 const port = process.env.PORT || 9000;
 
-//Routes
+app.use(cors());
+app.use(express.json()); // Para parsear JSON en las solicitudes
+
+// Rutas
 app.get('/', (req, res) => {
-    res.send("Api funcionando! :D")
+  res.send('Api funcionando! :D');
 });
+app.use('/api/home', homeRoute);
 
-app.use('/api', usersRoute);
-
-//Conexion a MongoDB
+// Conexión a MongoDB
 mongoose
-    .connect(process.env.DB_MONGO)
-    .then(() => console.log("Conectado a la base de datos en MongoDB"))
-    .catch((eror) => console.log(error));
+  .connect(process.env.DB_MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Conectado a la base de datos en MongoDB'))
+  .catch((error) => console.log(error));
 
 app.listen(port, () => {
-    console.log("El servidor esta corriendo en el puerto", port);
+  console.log('El servidor está corriendo en el puerto', port);
 });
