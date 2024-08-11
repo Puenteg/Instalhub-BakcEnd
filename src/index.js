@@ -1,12 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 require("dotenv").config();
 
 const usersRoute = require("./routes/users");
-
+const comentariosRoute = require('./routes/comentarios');
 
 const app = express();
 const port = process.env.PORT || 9000;
+
+app.use(cors())
+app.use(express.json());
 
 //Routes
 app.get('/', (req, res) => {
@@ -14,6 +18,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', usersRoute);
+app.use('/api/comentarios', comentariosRoute);
 
 //Conexion a MongoDB
 mongoose
